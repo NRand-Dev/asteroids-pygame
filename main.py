@@ -1,7 +1,7 @@
-from tkinter import constants
+# from tkinter import constants
 
 import pygame
-from pygame.color import Color
+#from pygame.color import Color
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from logger import log_state
 
@@ -13,6 +13,8 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+
+
     # While pygame is running, call log state.
     while pygame.get_init() == True:
         log_state()
@@ -22,8 +24,11 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
+        clock = pygame.time.Clock()
         # Draw the screen
         screen.fill("black")
+        dt = clock.tick(60) / 1000
+
         # Refresh the screen
         pygame.display.flip()
 
