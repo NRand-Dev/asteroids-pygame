@@ -4,6 +4,7 @@ import pygame
 #from pygame.color import Color
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from logger import log_state
+from player import Player
 
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -12,6 +13,8 @@ def main():
     # Initalize the game
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+    player = Player(SCREEN_WIDTH /2, SCREEN_HEIGHT / 2, 2)
 
 
 
@@ -29,8 +32,11 @@ def main():
         screen.fill("black")
         dt = clock.tick(60) / 1000
 
+        # Draw the player
+        player.draw(screen)
         # Refresh the screen
         pygame.display.flip()
+
 
 
 
