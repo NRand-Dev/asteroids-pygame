@@ -13,10 +13,21 @@ def main():
     # Initalize the game
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
 
+
+    # Create pygame groups
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    # Player is the name of the class, not an instance of it
+    # This must be done before any Player objects are created
+    Player.containers = (updatable, drawable)
+
+    # Create the player
     player = Player(SCREEN_WIDTH /2, SCREEN_HEIGHT / 2, 2)
 
-
+    dt = 0.0
 
     # While pygame is running, call log state.
     while pygame.get_init() == True:
@@ -27,14 +38,17 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
-        clock = pygame.time.Clock()
         # Draw the screen
         screen.fill("black")
+        # Calculate delta time capping at 60 FPS.
         dt = clock.tick(60) / 1000
 
-        # Draw the player
-        player.update(dt)
-        player.draw(screen)
+
+
+        # Update the groups
+        updatable.update(dt)
+        for item in drawable:
+            item.draw(screen)
         # Refresh the screen
         pygame.display.flip()
 
