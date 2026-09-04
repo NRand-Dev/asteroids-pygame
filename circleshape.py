@@ -1,3 +1,6 @@
+from platform import freedesktop_os_release
+from turtle import position
+
 import pygame
 
 
@@ -23,3 +26,16 @@ class CircleShape(pygame.sprite.Sprite):
     def update(self, dt: float) -> None:
         # must override
         pass
+
+        # Other should be a CircleShape
+    def collides_with(self, other: "CircleShape") -> bool:
+        # If it is NOT a CircleShape, return False
+        if not isinstance(other, CircleShape):
+            return False
+
+        # Calculate distance between two centers.
+        distance = self.position.distance_to(other.position)
+        # Calculate collision distance. If distance is lower than this number, objects are colliding.
+        radius_total = self.radius + other.radius
+
+        return distance <= self.radius + other.radius

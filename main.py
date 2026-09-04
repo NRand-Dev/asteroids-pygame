@@ -1,13 +1,15 @@
 # from tkinter import constants
 
 import pygame
+import sys
 #from pygame.color import Color
 import asteroidfield
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from logger import log_state
+from logger import log_state, log_event
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from shot import Shot
 
 
 def main():
@@ -24,12 +26,14 @@ def main():
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+    shots = pygame.sprite.Group()
 
     # Player is the name of the class, not an instance of it
     # This must be done before any Player objects are created
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
+    Shot.containers = (shots, drawable, updatable)
 
     # Create inital objects
     player = Player(SCREEN_WIDTH /2, SCREEN_HEIGHT / 2, 2)
@@ -56,6 +60,15 @@ def main():
         updatable.update(dt)
         for item in drawable:
             item.draw(screen)
+        for item in asteroids:
+            if item.collides_with(player):
+                log_event("player_hit")
+                print("Game over!")
+                # Close the game
+                sys.exit()
+            else:
+                continue
+
         # Refresh the screen
         pygame.display.flip()
 
