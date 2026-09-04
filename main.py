@@ -10,6 +10,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+import shot
 
 
 def main():
@@ -60,14 +61,20 @@ def main():
         updatable.update(dt)
         for item in drawable:
             item.draw(screen)
-        for item in asteroids:
-            if item.collides_with(player):
+        for asteroid in asteroids:
+            if asteroid.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
                 # Close the game
                 sys.exit()
             else:
-                continue
+                # Check for shot collison
+                for shot in shots:
+                    if shot.collides_with(asteroid):
+                        log_event("asteroid_shot")
+                        asteroid.kill()
+                        #TODO - UPDATE SCORE HERE - Future feature to add.
+                        shot.kill()
 
         # Refresh the screen
         pygame.display.flip()
