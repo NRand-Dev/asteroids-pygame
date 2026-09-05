@@ -1,5 +1,7 @@
 # from tkinter import constants
 
+from tkinter import CENTER
+
 import pygame
 import sys
 #from pygame.color import Color
@@ -22,6 +24,9 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
 
+    score = 0 # Initalize score
+    font = pygame.font.SysFont("arial", 36, True) # Choose font and size. True makes it bold.
+
 
     # Create pygame groups
     updatable = pygame.sprite.Group()
@@ -35,6 +40,7 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (shots, drawable, updatable)
+
 
     # Create inital objects
     player = Player(SCREEN_WIDTH /2, SCREEN_HEIGHT / 2, 2)
@@ -72,10 +78,20 @@ def main():
                 for shot in shots:
                     if shot.collides_with(asteroid):
                         log_event("asteroid_shot")
-                        asteroid.split()
+                        asteroid.split() # Break asteroid
+                        score += 1 # Update score
 
-                        #TODO - UPDATE SCORE HERE - Future feature to add.
-                        shot.kill()
+                        shot.kill() # Destory shot
+
+
+        # Render and display score
+        text = font.render("Score: " + str(score), 1, (255,255,255))
+        text_center = text.get_rect(center=(SCREEN_WIDTH / 2, 40))
+        # Screen width is trying to set the x position of the text.
+        # Currently, Screen_width is a constant of 1280. And starting the score at the halfway point makes it look off center.
+        # I will need to find a way to get the current size of the pygame screen. Divide it by 2. And subtract an offset equal to half of the texts length.
+        screen.blit(text, text_center)
+
 
         # Refresh the screen
         pygame.display.flip()
